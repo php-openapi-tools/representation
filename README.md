@@ -1,2 +1,2 @@
-# openapi-client-generator
-OpenAPI client generator
+# representation
+User friendly OpenAPI Spec representation
