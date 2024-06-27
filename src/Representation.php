@@ -14,7 +14,7 @@ final readonly class Representation
         public Client $client,
         /** @var array<WebHook> $webHooks */
         public array $webHooks,
-        /** @array<Schema> $schemas */
+        /** @var array<Schema> $schemas */
         public array $schemas,
     ) {
     }
