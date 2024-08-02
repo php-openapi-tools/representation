@@ -8,6 +8,10 @@ use cebe\openapi\spec\ExternalDocumentation;
 use OpenAPITools\Representation\Operation\EmptyResponse;
 use OpenAPITools\Representation\Operation\RequestBody;
 use OpenAPITools\Representation\Operation\Response;
+use OpenAPITools\Utils\ClassString;
+use OpenAPITools\Utils\Namespace_;
+
+use function array_map;
 
 final readonly class Operation
 {
@@ -47,5 +51,31 @@ final readonly class Operation
         /** @var array<EmptyResponse> $empty */
         public array $empty,
     ) {
+    }
+
+    public function namespace(Namespace_ $namespace): Namespaced\Operation
+    {
+        return new Namespaced\Operation(
+            ClassString::factory($namespace, $this->className),
+            ClassString::factory($namespace, $this->classNameSanitized),
+            ClassString::factory($namespace, $this->operatorClassName),
+            $this->operatorLookUpMethod,
+            $this->name,
+            $this->nameCamel,
+            $this->group,
+            $this->groupCamel,
+            $this->operationId,
+            $this->matchMethod,
+            $this->method,
+            $this->summary,
+            $this->externalDocs,
+            $this->path,
+            $this->metaData,
+            $this->returnType,
+            $this->parameters,
+            array_map(static fn (RequestBody $requestBody): Namespaced\Operation\RequestBody => $requestBody->namespace($namespace), $this->requestBody),
+            array_map(static fn (Response $response): Namespaced\Operation\Response => $response->namespace($namespace), $this->response),
+            array_map(static fn (EmptyResponse $emptyResponse): Namespaced\Operation\EmptyResponse => $emptyResponse->namespace($namespace), $this->empty),
+        );
     }
 }

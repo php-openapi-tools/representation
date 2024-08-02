@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace OpenAPITools\Representation;
 
 use OpenAPITools\Representation\Property\Type;
+use OpenAPITools\Utils\Namespace_;
 
 final class Property
 {
@@ -18,5 +19,18 @@ final class Property
         public readonly bool $nullable,
         public readonly array $enum,
     ) {
+    }
+
+    public function namespace(Namespace_ $namespace): Namespaced\Property
+    {
+        return new Namespaced\Property(
+            $this->name,
+            $this->sourceName,
+            $this->description,
+            $this->example,
+            $this->type->namespace($namespace),
+            $this->nullable,
+            $this->enum,
+        );
     }
 }
