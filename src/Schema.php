@@ -5,6 +5,10 @@ declare(strict_types=1);
 namespace OpenAPITools\Representation;
 
 use cebe\openapi\spec\Schema as baseSchema;
+use OpenAPITools\Utils\ClassString;
+use OpenAPITools\Utils\Namespace_;
+
+use function array_map;
 
 final class Schema
 {
@@ -32,5 +36,23 @@ final class Schema
         public readonly array $type,
         public readonly array $alias,
     ) {
+    }
+
+    public function namespace(Namespace_ $namespace): Namespaced\Schema
+    {
+        return new Namespaced\Schema(
+            ClassString::factory($namespace, $this->className),
+            array_map(static fn (Contract $contract): Namespaced\Contract => $contract->namespace($namespace), $this->contracts),
+            ClassString::factory($namespace, $this->errorClassName),
+            ClassString::factory($namespace, $this->errorClassNameAliased),
+            $this->title,
+            $this->description,
+            $this->example,
+            array_map(static fn (Property $property): Namespaced\Property => $property->namespace($namespace), $this->properties),
+            $this->schema,
+            $this->isArray,
+            $this->type,
+            $this->alias,
+        );
     }
 }

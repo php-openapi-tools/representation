@@ -26,6 +26,12 @@ else
 		"ghcr.io/wyrihaximusnet/php:${PHP_VERSION}-nts-alpine-slim-dev"
 endif
 
+ifneq (,$(findstring icrosoft,$(shell cat /proc/version)))
+    THREADS=1
+else
+    THREADS=$(shell nproc)
+endif
+
 all: ## Runs everything ###
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | grep -v "###" | awk 'BEGIN {FS = ":.*?## "}; {printf "%s\n", $$1}' | xargs --open-tty $(MAKE)
 
@@ -44,6 +50,20 @@ stan: ## Run static analysis (PHPStan)
 psalm: ## Run static analysis (Psalm)
 	$(DOCKER_RUN) vendor/bin/psalm --threads=$(shell nproc) --shepherd --stats --config=./etc/qa/psalm.xml
 
+unit-testing: ## Run tests
+	$(DOCKER_RUN) vendor/bin/phpunit --colors=always -c ./etc/qa/phpunit.xml --coverage-text --coverage-html ./var/tests-unit-coverage-html --coverage-clover ./var/tests-unit-clover-coverage.xml
+	$(DOCKER_RUN) test -n "$(COVERALLS_REPO_TOKEN)" && test -n "$(COVERALLS_RUN_LOCALLY)" && test -f ./var/tests-unit-clover-coverage.xml && vendor/bin/php-coveralls -v --coverage_clover ./build/logs/clover.xml --json_path ./var/tests-unit-clover-coverage-upload.json || true
+
+unit-testing-raw: ## Run tests ###
+	php vendor/phpunit/phpunit/phpunit --colors=always -c ./etc/qa/phpunit.xml --coverage-text --coverage-html ./var/tests-unit-coverage-html --coverage-clover ./var/tests-unit-clover-coverage.xml
+	test -n "$(COVERALLS_REPO_TOKEN)" && test -n "$(COVERALLS_RUN_LOCALLY)" && test -f ./var/tests-unit-clover-coverage.xml && ./vendor/bin/php-coveralls -v --coverage_clover ./build/logs/clover.xml --json_path ./var/tests-unit-clover-coverage-upload.json || true
+
+mutation-testing: ## Run mutation testing
+	$(DOCKER_RUN) vendor/bin/roave-infection-static-analysis-plugin --ansi --log-verbosity=all --threads=$(THREADS) --psalm-config etc/qa/psalm.xml || (cat ./var/infection.log && false)
+
+mutation-testing-raw: ## Run mutation testing ###
+	php vendor/roave/infection-static-analysis-plugin/bin/roave-infection-static-analysis-plugin --ansi --log-verbosity=all --threads=$(THREADS) --psalm-config etc/qa/psalm.xml || (cat ./var/infection.log && false)
+
 backward-compatibility-check: ## Check code for backwards incompatible changes
 	$(DOCKER_RUN) vendor/bin/roave-backward-compatibility-check || true
 
@@ -56,17 +76,3 @@ task-list-ci: ## CI: Generate a JSON array of jobs to run, matches the commands 
 help: ## Show this help ###
 	@printf "\033[33mUsage:\033[0m\n  make [target]\n\n\033[33mTargets:\033[0m\n"
 	@grep -E '^[a-zA-Z0-9_-]+:.*?## .*$$' $(MAKEFILE_LIST) | sort | awk 'BEGIN {FS = ":.*?## "}; {printf "  \033[32m%-32s\033[0m %s\n", $$1, $$2}' | tr -d '#'
-
-generate-example-clients: generate-example-client-one generate-example-client-subsplit generate-example-client-miele
-
-generate-example-client-one:
-	$(DOCKER_RUN) php ./bin/openapi-client-generator ./example/openapi-client-one.yaml
-
-generate-example-client-subsplit:
-	$(DOCKER_RUN) php ./bin/openapi-client-generator ./example/openapi-client-subsplit.yaml
-
-generate-example-client-miele:
-	$(DOCKER_RUN) php ./bin/openapi-client-generator ./example/openapi-client-miele.yaml
-
-generate-test-client:
-	$(DOCKER_RUN) php ./bin/openapi-client-generator ./tests/openapi-client-petstore.yaml

@@ -1,6 +1,2 @@
-parameters:
-	ignoreErrors:
-		- '#Call to function in_array\(\) requires parameter \#3 to be true.#'
-
 includes:
 	- ../../vendor/wyrihaximus/test-utilities/rules.neon
