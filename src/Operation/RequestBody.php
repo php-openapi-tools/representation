@@ -8,11 +8,12 @@ use OpenAPITools\Representation\Namespaced;
 use OpenAPITools\Representation\Schema;
 use OpenAPITools\Utils\Namespace_;
 
-final class RequestBody
+/** @api */
+final readonly class RequestBody
 {
     public function __construct(
-        public readonly string $contentType,
-        public readonly Schema $schema,
+        public string $contentType,
+        public Schema $schema,
     ) {
     }
 

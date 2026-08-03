@@ -6,11 +6,12 @@ namespace OpenAPITools\Representation\Namespaced\Operation;
 
 use OpenAPITools\Representation\Namespaced\Schema;
 
-final class RequestBody
+/** @api */
+final readonly class RequestBody
 {
     public function __construct(
-        public readonly string $contentType,
-        public readonly Schema $schema,
+        public string $contentType,
+        public Schema $schema,
     ) {
     }
 }

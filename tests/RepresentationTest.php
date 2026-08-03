@@ -19,11 +19,12 @@ use OpenAPITools\Representation\Schema;
 use OpenAPITools\Utils\Namespace_;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
+use PHPUnit\Framework\Attributes\Test;
 use WyriHaximus\TestUtilities\TestCase;
 
 final class RepresentationTest extends TestCase
 {
-    private static function getNamespacedRepresentation(): \OpenAPITools\Representation\Namespaced\Representation
+    private function getNamespacedRepresentation(): \OpenAPITools\Representation\Namespaced\Representation
     {
         $exampleData    =
             new ExampleData(
@@ -189,10 +190,10 @@ final class RepresentationTest extends TestCase
         return $representation->namespace($namespace);
     }
 
-    /** @test */
+    #[Test]
     public function schemaClassName(): void
     {
-        $namespaced = self::getNamespacedRepresentation();
+        $namespaced = $this->getNamespacedRepresentation();
 
         self::assertCount(1, $namespaced->schemas);
         self::assertSame('\Vendor\Saus\Schema\SomeDataValueObject', $namespaced->schemas[0]->className->fullyQualified->source);
@@ -200,19 +201,19 @@ final class RepresentationTest extends TestCase
         self::assertSame('\Vendor\Saus\Schema\ErrorAlias\SomeDataValueObject', $namespaced->schemas[0]->errorClassNameAliased->fullyQualified->source);
     }
 
-    /** @test */
+    #[Test]
     public function schemaContractClassName(): void
     {
-        $namespaced = self::getNamespacedRepresentation();
+        $namespaced = $this->getNamespacedRepresentation();
 
         self::assertCount(1, $namespaced->schemas[0]->contracts);
         self::assertSame('\Vendor\Saus\Contract\SomeDataValueObject', $namespaced->schemas[0]->contracts[0]->className->fullyQualified->source);
     }
 
-    /** @test */
+    #[Test]
     public function schemaContractProperty(): void
     {
-        $namespaced = self::getNamespacedRepresentation();
+        $namespaced = $this->getNamespacedRepresentation();
 
         self::assertCount(1, $namespaced->schemas[0]->contracts[0]->properties);
         self::assertInstanceOf(Namespaced\Property\Type::class, $namespaced->schemas[0]->contracts[0]->properties[0]->type->payload);
@@ -220,10 +221,10 @@ final class RepresentationTest extends TestCase
         self::assertSame('\Vendor\Saus\Schema\SomeOtherDataValueObject', $namespaced->schemas[0]->contracts[0]->properties[0]->type->payload->payload->className->fullyQualified->source);
     }
 
-    /** @test */
+    #[Test]
     public function schemaProperty(): void
     {
-        $namespaced = self::getNamespacedRepresentation();
+        $namespaced = $this->getNamespacedRepresentation();
 
         self::assertCount(1, $namespaced->schemas[0]->properties);
         self::assertInstanceOf(Namespaced\Property\Type::class, $namespaced->schemas[0]->properties[0]->type->payload);
@@ -231,48 +232,48 @@ final class RepresentationTest extends TestCase
         self::assertSame('\Vendor\Saus\Schema\SomeOtherDataValueObject', $namespaced->schemas[0]->properties[0]->type->payload->payload->className->fullyQualified->source);
     }
 
-    /** @test */
+    #[Test]
     public function pathHydratorClassName(): void
     {
-        $namespaced = self::getNamespacedRepresentation();
+        $namespaced = $this->getNamespacedRepresentation();
 
         self::assertCount(1, $namespaced->client->paths);
         self::assertSame('\Vendor\Saus\Hydrators\SomeName', $namespaced->client->paths[0]->hydrator->className->fullyQualified->source);
         self::assertSame('\Vendor\Tests\Saus\Hydrators\SomeName', $namespaced->client->paths[0]->hydrator->className->fullyQualified->test);
     }
 
-    /** @test */
+    #[Test]
     public function pathHydratorSchemaClassName(): void
     {
-        $namespaced = self::getNamespacedRepresentation();
+        $namespaced = $this->getNamespacedRepresentation();
 
         self::assertCount(1, $namespaced->client->paths[0]->hydrator->schemas);
         self::assertSame('\Vendor\Saus\Schema\SomeDataValueObject', $namespaced->client->paths[0]->hydrator->schemas[0]->className->fullyQualified->source);
     }
 
-    /** @test */
+    #[Test]
     public function operationClassName(): void
     {
-        $namespaced = self::getNamespacedRepresentation();
+        $namespaced = $this->getNamespacedRepresentation();
 
         self::assertSame('\Vendor\Saus\Operation\VroemVroemMotherFucker', $namespaced->client->paths[0]->operations[0]->className->fullyQualified->source);
         self::assertSame('\Vendor\Saus\Operation\VroemVroemMotherFucker', $namespaced->client->paths[0]->operations[0]->classNameSanitized->fullyQualified->source);
         self::assertSame('\Vendor\Saus\Operator\VroemVroemMotherFucker', $namespaced->client->paths[0]->operations[0]->operatorClassName->fullyQualified->source);
     }
 
-    /** @test */
+    #[Test]
     public function operationRequestBodyClassName(): void
     {
-        $namespaced = self::getNamespacedRepresentation();
+        $namespaced = $this->getNamespacedRepresentation();
 
         self::assertCount(1, $namespaced->client->paths[0]->operations[0]->requestBody);
         self::assertSame('\Vendor\Saus\Schema\SomeDataValueObject', $namespaced->client->paths[0]->operations[0]->requestBody[0]->schema->className->fullyQualified->source);
     }
 
-    /** @test */
+    #[Test]
     public function operationResponseClassName(): void
     {
-        $namespaced = self::getNamespacedRepresentation();
+        $namespaced = $this->getNamespacedRepresentation();
 
         self::assertCount(3, $namespaced->client->paths[0]->operations[0]->response);
 
@@ -290,10 +291,10 @@ final class RepresentationTest extends TestCase
         self::assertSame('\Vendor\Saus\Schema\SomeDataValueObject', $namespaced->client->paths[0]->operations[0]->response[2]->content->className->fullyQualified->source);
     }
 
-    /** @test */
+    #[Test]
     public function operationResponseHeaderSchemaClassName(): void
     {
-        $namespaced = self::getNamespacedRepresentation();
+        $namespaced = $this->getNamespacedRepresentation();
 
         self::assertCount(1, $namespaced->client->paths[0]->operations[0]->empty);
         self::assertCount(1, $namespaced->client->paths[0]->operations[0]->empty[0]->headers);

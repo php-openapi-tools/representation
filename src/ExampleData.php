@@ -6,11 +6,12 @@ namespace OpenAPITools\Representation;
 
 use PhpParser\Node;
 
-final class ExampleData
+/** @api */
+final readonly class ExampleData
 {
     public function __construct(
-        public readonly mixed $raw,
-        public readonly Node\Expr $node,
+        public mixed $raw,
+        public Node\Expr $node,
     ) {
     }
 }

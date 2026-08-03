@@ -6,14 +6,15 @@ namespace OpenAPITools\Representation\Namespaced;
 
 use OpenAPITools\Utils\ClassString;
 
-final class Hydrator
+/** @api */
+final readonly class Hydrator
 {
     /** @param array<Schema> $schemas */
     public function __construct(
-        public readonly ClassString $className,
-        public readonly string $methodName,
+        public ClassString $className,
+        public string $methodName,
         /** @var array<Schema> $schemas */
-        public readonly array $schemas,
+        public array $schemas,
     ) {
     }
 }

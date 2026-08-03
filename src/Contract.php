@@ -9,13 +9,14 @@ use OpenAPITools\Utils\Namespace_;
 
 use function array_map;
 
-final class Contract
+/** @api */
+final readonly class Contract
 {
     /** @param array<Property> $properties */
     public function __construct(
-        public readonly string $className,
+        public string $className,
         /** @var array<Property> $properties */
-        public readonly array $properties,
+        public array $properties,
     ) {
     }
 

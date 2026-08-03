@@ -4,13 +4,14 @@ declare(strict_types=1);
 
 namespace OpenAPITools\Representation\Namespaced;
 
-final class Client
+/** @api */
+final readonly class Client
 {
     /** @param array<Path> $paths */
-    public function __construct( /** @phpstan-ignore-line */
-        public readonly string|null $baseUrl,
+    public function __construct(
+        public string|null $baseUrl,
         /** @var array<Path> $paths */
-        public readonly array $paths,
+        public array $paths,
     ) {
     }
 }

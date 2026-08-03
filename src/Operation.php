@@ -13,6 +13,7 @@ use OpenAPITools\Utils\Namespace_;
 
 use function array_map;
 
+/** @api */
 final readonly class Operation
 {
     /**
@@ -23,7 +24,7 @@ final readonly class Operation
      * @param array<Response>      $response
      * @param array<EmptyResponse> $empty
      */
-    public function __construct( /** @phpstan-ignore-line */
+    public function __construct(
         public string $className,
         public string $classNameSanitized,
         public string $operatorClassName,

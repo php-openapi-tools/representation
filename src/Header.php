@@ -6,12 +6,13 @@ namespace OpenAPITools\Representation;
 
 use OpenAPITools\Utils\Namespace_;
 
-final class Header
+/** @api */
+final readonly class Header
 {
     public function __construct(
-        public readonly string $name,
-        public readonly Schema $schema,
-        public readonly ExampleData $example,
+        public string $name,
+        public Schema $schema,
+        public ExampleData $example,
     ) {
     }
 

@@ -7,7 +7,8 @@ namespace OpenAPITools\Representation\Namespaced;
 use cebe\openapi\spec\Schema as baseSchema;
 use OpenAPITools\Utils\ClassString;
 
-final class Schema
+/** @api */
+final readonly class Schema
 {
     /**
      * @param array<Contract> $contracts
@@ -17,21 +18,21 @@ final class Schema
      * @param array<string>   $alias
      */
     public function __construct(
-        public readonly ClassString $className,
+        public ClassString $className,
         /** @var array<Contract> $contracts */
-        public readonly array $contracts,
-        public readonly ClassString $errorClassName,
-        public readonly ClassString $errorClassNameAliased,
-        public readonly string $title,
-        public readonly string $description,
+        public array $contracts,
+        public ClassString $errorClassName,
+        public ClassString $errorClassNameAliased,
+        public string $title,
+        public string $description,
         /** @var array<mixed> $example */
-        public readonly array $example,
+        public array $example,
         /** @var array<Property> $properties */
-        public readonly array $properties,
-        public readonly baseSchema $schema,
-        public readonly bool $isArray,
-        public readonly array $type,
-        public readonly array $alias,
+        public array $properties,
+        public baseSchema $schema,
+        public bool $isArray,
+        public array $type,
+        public array $alias,
     ) {
     }
 }

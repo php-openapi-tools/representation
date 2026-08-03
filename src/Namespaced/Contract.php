@@ -6,13 +6,14 @@ namespace OpenAPITools\Representation\Namespaced;
 
 use OpenAPITools\Utils\ClassString;
 
-final class Contract
+/** @api */
+final readonly class Contract
 {
     /** @param array<Property> $properties */
     public function __construct(
-        public readonly ClassString $className,
+        public ClassString $className,
         /** @var array<Property> $properties */
-        public readonly array $properties,
+        public array $properties,
     ) {
     }
 }
