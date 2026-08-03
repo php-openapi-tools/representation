@@ -4,17 +4,18 @@ declare(strict_types=1);
 
 namespace OpenAPITools\Representation;
 
-final class Parameter
+/** @api */
+final readonly class Parameter
 {
-    public function __construct( /** @phpstan-ignore-line */
-        public readonly string $name,
-        public readonly string $targetName,
-        public readonly string $description,
-        public readonly string $type,
-        public readonly string|null $format,
-        public readonly string $location,
-        public readonly mixed $default,
-        public readonly ExampleData $example,
+    public function __construct(
+        public string $name,
+        public string $targetName,
+        public string $description,
+        public string $type,
+        public string|null $format,
+        public string $location,
+        public mixed $default,
+        public ExampleData $example,
     ) {
     }
 }

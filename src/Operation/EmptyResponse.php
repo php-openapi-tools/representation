@@ -10,6 +10,7 @@ use OpenAPITools\Utils\Namespace_;
 
 use function array_map;
 
+/** @api */
 final readonly class EmptyResponse
 {
     /** @param array<Header> $headers */

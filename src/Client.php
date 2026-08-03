@@ -8,13 +8,14 @@ use OpenAPITools\Utils\Namespace_;
 
 use function array_map;
 
-final class Client
+/** @api */
+final readonly class Client
 {
     /** @param array<Path> $paths */
-    public function __construct( /** @phpstan-ignore-line */
-        public readonly string|null $baseUrl,
+    public function __construct(
+        public string|null $baseUrl,
         /** @var array<Path> $paths */
-        public readonly array $paths,
+        public array $paths,
     ) {
     }
 

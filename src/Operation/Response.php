@@ -9,13 +9,14 @@ use OpenAPITools\Representation\Property\Type;
 use OpenAPITools\Representation\Schema;
 use OpenAPITools\Utils\Namespace_;
 
-final class Response
+/** @api */
+final readonly class Response
 {
     public function __construct(
-        public readonly int|string $code,
-        public readonly string $contentType,
-        public readonly string $description,
-        public readonly Schema|Type $content,
+        public int|string $code,
+        public string $contentType,
+        public string $description,
+        public Schema|Type $content,
     ) {
     }
 

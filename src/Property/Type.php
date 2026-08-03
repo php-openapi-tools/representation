@@ -10,15 +10,16 @@ use OpenAPITools\Utils\Namespace_;
 
 use function is_array;
 
-final class Type
+/** @api */
+final readonly class Type
 {
     /** @param string|Schema|Type|array<Type> $payload */
-    public function __construct( /** @phpstan-ignore-line */
-        public readonly string $type,
-        public readonly string|null $format,
-        public readonly string|null $pattern,
-        public readonly string|Schema|Type|array $payload,
-        public readonly bool $nullable,
+    public function __construct(
+        public string $type,
+        public string|null $format,
+        public string|null $pattern,
+        public string|Schema|Type|array $payload,
+        public bool $nullable,
     ) {
     }
 

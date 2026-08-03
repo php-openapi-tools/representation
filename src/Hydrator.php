@@ -9,14 +9,15 @@ use OpenAPITools\Utils\Namespace_;
 
 use function array_map;
 
-final class Hydrator
+/** @api */
+final readonly class Hydrator
 {
     /** @param array<Schema> $schemas */
     public function __construct(
-        public readonly string $className,
-        public readonly string $methodName,
+        public string $className,
+        public string $methodName,
         /** @var array<Schema> $schemas */
-        public readonly array $schemas,
+        public array $schemas,
     ) {
     }
 

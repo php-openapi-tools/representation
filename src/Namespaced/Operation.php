@@ -11,6 +11,7 @@ use OpenAPITools\Representation\Namespaced\Operation\Response;
 use OpenAPITools\Representation\Parameter;
 use OpenAPITools\Utils\ClassString;
 
+/** @api */
 final readonly class Operation
 {
     /**
@@ -21,7 +22,7 @@ final readonly class Operation
      * @param array<Response>      $response
      * @param array<EmptyResponse> $empty
      */
-    public function __construct( /** @phpstan-ignore-line */
+    public function __construct(
         public ClassString $className,
         public ClassString $classNameSanitized,
         public ClassString $operatorClassName,

@@ -6,6 +6,7 @@ namespace OpenAPITools\Representation\Namespaced\Operation;
 
 use OpenAPITools\Representation\Namespaced\Header;
 
+/** @api */
 final readonly class EmptyResponse
 {
     /** @param array<Header> $headers */
