@@ -11,11 +11,14 @@ use OpenAPITools\Representation\Header;
 use OpenAPITools\Representation\Hydrator;
 use OpenAPITools\Representation\Namespaced;
 use OpenAPITools\Representation\Operation;
+use OpenAPITools\Representation\Parameter;
 use OpenAPITools\Representation\Path;
 use OpenAPITools\Representation\Property;
 use OpenAPITools\Representation\Property\Type;
 use OpenAPITools\Representation\Representation;
 use OpenAPITools\Representation\Schema;
+use OpenAPITools\Representation\WebHook;
+use OpenAPITools\Representation\WebHookEvent;
 use OpenAPITools\Utils\Namespace_;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Name;
@@ -118,7 +121,18 @@ final class RepresentationTest extends TestCase
                                 '/vroem/vroem/mother/fucker',
                                 [],
                                 ['application/exhaust-fumes'],
-                                [],
+                                [
+                                    new Parameter(
+                                        'name',
+                                        'name',
+                                        'description',
+                                        'string',
+                                        null,
+                                        'query',
+                                        null,
+                                        $exampleData,
+                                    ),
+                                ],
                                 [
                                     new Operation\RequestBody(
                                         'application/bezine',
@@ -183,7 +197,33 @@ final class RepresentationTest extends TestCase
                     ),
                 ],
             ),
-            [],
+            [
+                new WebHookEvent(
+                    'event.name',
+                    new Hydrator(
+                        'Hydrators\WebHookName',
+                        'webHookMethodName',
+                        [$schema],
+                    ),
+                    [
+                        new WebHook(
+                            'event.name',
+                            'summary',
+                            'description',
+                            'operationId',
+                            'https://example.com/docs',
+                            [
+                                new Header(
+                                    'X-Event-Id',
+                                    $schema,
+                                    $exampleData,
+                                ),
+                            ],
+                            ['body' => $schema],
+                        ),
+                    ],
+                ),
+            ],
             [$schema],
         );
 
@@ -299,5 +339,28 @@ final class RepresentationTest extends TestCase
         self::assertCount(1, $namespaced->client->paths[0]->operations[0]->empty);
         self::assertCount(1, $namespaced->client->paths[0]->operations[0]->empty[0]->headers);
         self::assertSame('\Vendor\Saus\Schema\SomeDataValueObject', $namespaced->client->paths[0]->operations[0]->empty[0]->headers[0]->schema->className->fullyQualified->source);
+    }
+
+    #[Test]
+    public function webHookEvent(): void
+    {
+        $namespaced = $this->getNamespacedRepresentation();
+
+        self::assertCount(1, $namespaced->webHooks);
+        self::assertSame('event.name', $namespaced->webHooks[0]->event);
+        self::assertSame('\Vendor\Saus\Hydrators\WebHookName', $namespaced->webHooks[0]->hydrator->className->fullyQualified->source);
+        self::assertCount(1, $namespaced->webHooks[0]->webHooks);
+        self::assertSame('event.name', $namespaced->webHooks[0]->webHooks[0]->event);
+        self::assertSame('\Vendor\Saus\Schema\SomeDataValueObject', $namespaced->webHooks[0]->webHooks[0]->schema['body']->className->fullyQualified->source);
+        self::assertSame('\Vendor\Saus\Schema\SomeDataValueObject', $namespaced->webHooks[0]->webHooks[0]->headers[0]->schema->className->fullyQualified->source);
+    }
+
+    #[Test]
+    public function typeNamespaceWithStringPayload(): void
+    {
+        $namespace  = new Namespace_('Vendor\Saus', 'Vendor\Tests\Saus');
+        $namespaced = new Type('string', null, null, 'some-payload', false)->namespace($namespace);
+
+        self::assertSame('some-payload', $namespaced->payload);
     }
 }
