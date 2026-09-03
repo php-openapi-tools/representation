@@ -193,6 +193,28 @@ final class RepresentationTest extends TestCase
                                     ),
                                 ],
                             ),
+                            new Operation(
+                                'Operation\NoSummary',
+                                'Operation\NoSummary',
+                                'Operator\NoSummary',
+                                'noSummary',
+                                'no summary',
+                                'noSummary',
+                                null,
+                                null,
+                                'noSummary',
+                                'noSummary',
+                                'GET',
+                                null,
+                                null,
+                                '/no/summary',
+                                [],
+                                [],
+                                [],
+                                [],
+                                [],
+                                [],
+                            ),
                         ],
                     ),
                 ],
@@ -289,6 +311,15 @@ final class RepresentationTest extends TestCase
 
         self::assertCount(1, $namespaced->client->paths[0]->hydrator->schemas);
         self::assertSame('\Vendor\Saus\Schema\SomeDataValueObject', $namespaced->client->paths[0]->hydrator->schemas[0]->className->fullyQualified->source);
+    }
+
+    #[Test]
+    public function operationSummary(): void
+    {
+        $namespaced = $this->getNamespacedRepresentation();
+
+        self::assertSame('vroem vroem mother fucker', $namespaced->client->paths[0]->operations[0]->summary);
+        self::assertNull($namespaced->client->paths[0]->operations[1]->summary);
     }
 
     #[Test]
