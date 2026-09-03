@@ -34,7 +34,7 @@ final readonly class Operation
         public string $operationId,
         public string $matchMethod,
         public string $method,
-        public string $summary,
+        public string|null $summary,
         public ExternalDocumentation|null $externalDocs,
         public string $path,
         /** @var array<mixed> $metaData */
